@@ -3,47 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Asset</title>
+    <title>Asset Inventory</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
 </head>
 <body>
-    <h2>Add Asset</h2>
-    <form action="{{ url_for('add_asset') }}" method="POST" enctype="multipart/form-data">
-        <label for="user_name">User Name:</label>
-        <input type="text" name="user_name" required><br><br>
-
-        <label for="company_name">Company Name:</label>
-        <input type="text" name="company_name" required><br><br>
-
-        <label for="asset_type">Asset Type:</label>
-        <input type="text" name="asset_type" required><br><br>
-
-        <label for="description">Description/Specification:</label>
-        <textarea name="description" required></textarea><br><br>
-
-        <label for="invoice_number">Invoice Number:</label>
-        <input type="text" name="invoice_number" required><br><br>
-
-        <label for="invoice_date">Invoice / Purchase Date:</label>
-        <input type="date" name="invoice_date" required><br><br>
-
-        <label for="purchase_amount">Purchase Amount:</label>
-        <input type="number" name="purchase_amount" step="0.01" required><br><br>
-
-        <label for="vendor_name">Vendor Name:</label>
-        <input type="text" name="vendor_name" required><br><br>
-
-        <label for="warranty_start">Warranty Valid From:</label>
-        <input type="date" name="warranty_start" required><br><br>
-
-        <label for="warranty_end">Warranty Expires On:</label>
-        <input type="date" name="warranty_end" required><br><br>
-
-        <label for="invoice_file">Upload Invoice (PDF/JPG):</label>
-        <input type="file" name="invoice_file" accept=".pdf, .jpg, .jpeg, .png"><br><br>
-
-        <input type="submit" value="Add Asset">
-    </form>
-    <br>
-    <a href="{{ url_for('index') }}">Back to Asset List</a>
+    <h2>Asset Inventory</h2>
+    <a href="{{ url_for('add_asset') }}">Add New Asset</a>
+    <table>
+        <tr>
+            <th>User Name</th>
+            <th>Company Name</th>
+            <th>Asset Type</th>
+            <th>Description</th>
+            <th>Invoice Number</th>
+            <th>Invoice Date</th>
+            <th>Purchase Amount</th>
+            <th>Vendor Name</th>
+            <th>Warranty Start</th>
+            <th>Warranty End</th>
+            <th>Invoice</th>
+        </tr>
+        {% for asset in assets %}
+        <tr>
+            <td>{{ asset.user_name }}</td>
+            <td>{{ asset.company_name }}</td>
+            <td>{{ asset.asset_type }}</td>
+            <td>{{ asset.description }}</td>
+            <td>{{ asset.invoice_number }}</td>
+            <td>{{ asset.invoice_date }}</td>
+            <td>{{ asset.purchase_amount }}</td>
+            <td>{{ asset.vendor_name }}</td>
+            <td>{{ asset.warranty_start }}</td>
+            <td>{{ asset.warranty_end }}</td>
+            <td>
+                {% if asset.invoice_file %}
+                <a href="{{ url_for('uploaded_file', filename=asset.invoice_file) }}" target="_blank">View Invoice</a>
+                {% else %}
+                No Invoice
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
